@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import { createVuetify } from 'vuetify';
+import '@/styles/global.css';
 
 const vuetify = createVuetify();
 
