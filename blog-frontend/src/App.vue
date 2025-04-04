@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-main>
-      <v-btn>test</v-btn>
       <router-view/>
     </v-main>
     <footer-view></footer-view>
