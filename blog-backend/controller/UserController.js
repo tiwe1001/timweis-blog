@@ -7,11 +7,11 @@ async function getAllUsers(request, response) {
 
         const users = result.rows.map(row => {
             return new User(
-                row.userId,
+                row.userid,
                 row.username,
                 row.email,
                 row.admin,
-                row.createdAt
+                row.createdat
             );
         })
         response.json(users);
