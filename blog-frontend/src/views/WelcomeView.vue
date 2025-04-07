@@ -1,26 +1,34 @@
 <template>
-<v-container>
-    <v-row>
-      <v-col cols="12" md="8">
-        <div class="image-container">
-            <img class="logo" :src="imgLogo" />
-            <img class="circleA" :src="imgCircleA" />
-            <img class="circleB" :src="imgCircleB" />
-            <img class="circleC" :src="imgCircleC" />
-        </div>
-      </v-col>
-      <v-col class="d-flex flex-column align-center justify-center" cols="12" md="4">
-        <h1>T - BLOG</h1>
-        <h2 class="mb-4">REGISTER NOW!</h2>
-        <v-btn class="register-button mb-10" >SIGN UP</v-btn>
+    <v-container>
+        <v-row>
+            <v-col cols="12" md="8">
+                <div class="image-container">
+                    <img class="logo" :src="imgLogo" />
+                    <img class="circleA" :src="imgCircleA" />
+                    <img class="circleB" :src="imgCircleB" />
+                    <img class="circleC" :src="imgCircleC" />
+                </div>
+            </v-col>
+            <v-col class="d-flex flex-column align-center justify-center" cols="12" md="4">
+                <h1>{{ welcomeData.headline }}</h1>
+                <h2 class="mb-4">{{ welcomeData.registerDesc }}</h2>
+                <v-btn class="register-button mb-10">{{ welcomeData.registerBtn }}</v-btn>
         
-        <h1 class="el-or">OR</h1>
+                <h1 class="el-or">{{ welcomeData.inBetween }}</h1>
 
-        <h2 class="mt-10 mb-4">{{ loginDesc }}</h2>
-        <v-btn class="login-button">LOGIN</v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
+                <h2 class="mt-10 mb-4">{{ welcomeData.loginDesc }}</h2>
+                <v-btn
+                    class="login-button"
+                    @click="loginDialog = !loginDialog">
+                    {{ welcomeData.loginBtn }}
+                </v-btn>
+            </v-col>
+        </v-row>
+    </v-container>
+  
+    <v-dialog v-model="loginDialog" opacity="0.2">
+        <LoginComponent @close="loginDialog = false"></LoginComponent>
+    </v-dialog>
 </template> 
 
 <script setup lang="ts">
@@ -29,8 +37,18 @@ import imgLogo from '@/assets/logo-transparent.png';
 import imgCircleA from '@/assets/circle-1.png';
 import imgCircleB from '@/assets/circle-2.png';
 import imgCircleC from '@/assets/circle-3.png';
+import LoginComponent from '@/components/LoginComponent.vue';
 
-const loginDesc = 'Already have an Account?';
+const welcomeData = {
+    headline: 'T - BLOG',
+    inBetween: 'OR',
+    registerDesc: 'REGISTER NOW!',
+    registerBtn: 'SIGN UP',
+    loginDesc: 'Already have an Account?',
+    loginBtn: 'LOGIN',
+};
+
+const loginDialog = ref(false);
 </script>
 
 <style lang="css" scoped>
