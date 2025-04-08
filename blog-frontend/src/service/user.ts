@@ -12,6 +12,17 @@ export async function getUserList(): Promise<User[]> {
     }
 }
 
+export async function loginUser(username: string, password: string) {
+    const response = await axios.post(API_PATH + '/auth/login', {
+        username, password
+    });
+
+    const token = response.data.accessToken;
+    localStorage.setItem('accessToken', token)
+
+    return response.data;
+}
+
 export interface User {
     userId: number;
     username: string;

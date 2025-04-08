@@ -32,12 +32,13 @@
 </template> 
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import imgLogo from '@/assets/logo-transparent.png';
 import imgCircleA from '@/assets/circle-1.png';
 import imgCircleB from '@/assets/circle-2.png';
 import imgCircleC from '@/assets/circle-3.png';
 import LoginComponent from '@/components/LoginComponent.vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const welcomeData = {
     headline: 'T - BLOG',
@@ -49,6 +50,25 @@ const welcomeData = {
 };
 
 const loginDialog = ref(false);
+const route = useRoute();
+const router = useRouter();
+
+watch(
+  () => loginDialog.value,
+  (newPath) => {
+    if (loginDialog.value === true) router.push('/login');
+    else router.push('/');
+  },
+  { immediate: true }
+);
+
+watch(
+  () => route.path,
+  (newPath) => {
+    loginDialog.value = newPath === '/login';
+  },
+  { immediate: true } // Sofort beim Laden der Seite
+);
 </script>
 
 <style lang="css" scoped>
