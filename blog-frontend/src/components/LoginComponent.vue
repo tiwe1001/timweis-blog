@@ -8,13 +8,16 @@
 
         <v-divider></v-divider>
 
+        <v-form @submit.prevent="handleLogin(username, password)">
         <v-text-field
+            v-model="username"
             variant="outlined"
             width="250px"
             label="Username">
         </v-text-field>
 
         <v-text-field
+            v-model="password"
             variant="outlined"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
             :type="visible ? 'text' : 'password'"
@@ -22,10 +25,12 @@
             label="Password"
             @click:append-inner="toggleVisibility">
         </v-text-field>
+        <p v-if="loginFailedDialog" style="color: red">Wrong username / password!</p>
 
-        <v-btn class="login-button mt-5 mb-5" @click="handleLogin()">
+        <v-btn class="login-button mt-5 mb-5" type="submit">
             LOGIN
         </v-btn>
+    </v-form>
     </v-card>
 </template>
 
@@ -36,6 +41,10 @@ import { useUserStore } from '@/store/user';
 import router from '@/router';
 
 const userStore = useUserStore();
+
+const loginFailedDialog = ref(false);
+const username = ref('');
+const password = ref('');
 
 const emit = defineEmits(['close']);
 const visible = ref(false);
@@ -48,9 +57,9 @@ function closeLoginDialog() {
     emit('close');
 }
 
-const handleLogin = async () => {
+const handleLogin = async (username: string, password: string) => {
     try {
-        const data = await UserService.loginUser('admin', 'test123');
+        const data = await UserService.loginUser(username, password);
         console.log('login successfull: ', data);
 
         localStorage.setItem('accessToken', data.accessToken);
@@ -58,7 +67,8 @@ const handleLogin = async () => {
 
         router.push({ name: 'home' });
     } catch (error) {
-        console.error(error);
+        loginFailedDialog.value = true;
+        console.error('Wrong username / password!', error);
     }
 }
 </script>
