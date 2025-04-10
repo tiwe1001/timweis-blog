@@ -8,29 +8,29 @@
 
         <v-divider></v-divider>
 
-        <v-form @submit.prevent="handleLogin(username, password)">
-        <v-text-field
-            v-model="username"
-            variant="outlined"
-            width="250px"
-            label="Username">
-        </v-text-field>
+        <v-form class="d-flex flex-column align-center justify-center" @submit.prevent="handleLogin(username, password)">
+            <v-text-field
+                v-model="username"
+                variant="outlined"
+                width="250px"
+                label="Username">
+            </v-text-field>
 
-        <v-text-field
-            v-model="password"
-            variant="outlined"
-            :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-            :type="visible ? 'text' : 'password'"
-            width="250px"
-            label="Password"
-            @click:append-inner="toggleVisibility">
-        </v-text-field>
-        <p v-if="loginFailedDialog" style="color: red">Wrong username / password!</p>
+            <v-text-field
+                v-model="password"
+                variant="outlined"
+                :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                :type="visible ? 'text' : 'password'"
+                width="250px"
+                label="Password"
+                @click:append-inner="toggleVisibility">
+            </v-text-field>
+            <p v-if="loginFailedDialog" style="color: red">Wrong username / password!</p>
 
-        <v-btn class="login-button mt-5 mb-5" type="submit">
-            LOGIN
-        </v-btn>
-    </v-form>
+            <v-btn class="login-button mt-5 mb-5" type="submit">
+                LOGIN
+            </v-btn>
+        </v-form>
     </v-card>
 </template>
 
@@ -60,10 +60,10 @@ function closeLoginDialog() {
 const handleLogin = async (username: string, password: string) => {
     try {
         const data = await UserService.loginUser(username, password);
-        console.log('login successfull: ', data);
+        console.log('login successfull. ');
 
         localStorage.setItem('accessToken', data.accessToken);
-        userStore.setUser(data.accessToken, data.user.userId, data.user.username, data.user.email, data.user.isAdmin);
+        userStore.setUser(data.accessToken, data.user.userId, data.user.username, data.user.userPseudonym, data.user.email, data.user.isAdmin);
 
         router.push({ name: 'home' });
     } catch (error) {

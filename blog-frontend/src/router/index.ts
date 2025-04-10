@@ -7,18 +7,20 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'welcome',
-    component: WelcomeView
+    component: WelcomeView,
+    meta: { title: 'Welcome | T' }
   },
   {
     path: '/login',
     name: 'login',
-    component: WelcomeView
+    component: WelcomeView,
+    meta: { title: 'Login | T' }
   },
   {
     path: '/home',
     name: 'home',
     component: HomeView,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, title: 'Home | T' }
   },
 ]
 
@@ -26,6 +28,12 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+router.afterEach((to) => {
+  if (to.meta.title) {
+    document.title = to.meta.title as string;
+  }
+});
 
 router.beforeEach((to, from, next) => {
 	const userStore = useUserStore();

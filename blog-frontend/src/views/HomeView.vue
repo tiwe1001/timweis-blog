@@ -1,28 +1,11 @@
 <template>
 	<v-container>
-		<v-row style="height: 60px;">
-			<v-list class="bg-transparent position-absolute top-0 right-0">
-				<v-tooltip location="bottom" text="Account">
-					<template v-slot:activator="{ props }">
-						<v-icon v-bind="props">mdi-account</v-icon>
-					</template>
-				</v-tooltip>
-				<v-tooltip location="bottom" text="Settings">
-					<template v-slot:activator="{ props }">
-						<v-icon v-bind="props" class="ml-3">mdi-cog</v-icon>
-					</template>
-				</v-tooltip>
-				<v-tooltip location="bottom" text="Logout">
-					<template v-slot:activator="{ props }">
-						<v-icon v-bind="props" class="mr-3 ml-3" @click="handleLogout">mdi-logout</v-icon>
-					</template>
-				</v-tooltip>
-		</v-list>
+		<v-row class="justify-center align-center" style="height: 60px;">
+			<NavbarComponent></NavbarComponent>
 		</v-row>
-		<div v-for="post in posts" :key="post.postId" class="ma-3 ml-15 mr-15" style="background-color:blue;">
-			<p>{{ post.title }}</p>
-			{{ post.content }}
-		</div>
+
+		<CreatePostComponent></CreatePostComponent>
+		<PostsComponent :posts="posts"></PostsComponent>
 	</v-container>
 </template>
 
@@ -32,6 +15,10 @@ import { useUserStore } from '@/store/user';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import * as PostService from '@/service/post';
+import imgLogo from '@/assets/logo-transparent.png';
+import NavbarComponent from '@/components/NavbarComponent.vue';
+import CreatePostComponent from '@/components/CreatePostComponent.vue';
+import PostsComponent from '@/components/PostsComponent.vue';
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -45,13 +32,11 @@ const fetchData = async () => {
 	}
 }
 
-function handleLogout() {
-	userStore.clearUser();
-	localStorage.removeItem('accessToken');
-	router.push('/login');
-}
-
 onMounted(() => {
 	fetchData();
 });
 </script>
+
+<style lang="css" scoped>
+
+</style>

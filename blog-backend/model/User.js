@@ -1,7 +1,8 @@
 class User {
-    constructor(userId, username, email, admin, createdAt) {
+    constructor(userId, username, userPseudonym, email, admin, createdAt) {
       this.userId = userId;
       this.username = username;
+      this.userPseudonym = userPseudonym;
       this.email = email;
       this.admin = admin;
       this.createdAt = createdAt;
@@ -21,6 +22,14 @@ class User {
   
     setUsername(username) {
       this.username = username;
+    }
+
+    getUserPseudonym() {
+      return this.userPseudonym;
+    }
+  
+    setUserPseudonym(userPseudonym) {
+      this.userPseudonym = userPseudonym;
     }
   
     getEmail() {

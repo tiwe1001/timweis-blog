@@ -5,12 +5,13 @@ const jwt = require('jsonwebtoken');
 
 async function getAllUsers(request, response) {
     try {
-        const result = await pool.query(`SELECT userId, username, email, admin, createdAt FROM "user"`);
+        const result = await pool.query(`SELECT userId, username, userpseudonym email, admin, createdAt FROM "user"`);
 
         const users = result.rows.map(row => {
             return new User(
                 row.userid,
                 row.username,
+				row.userpseudonym,
                 row.email,
                 row.admin,
                 row.createdat
@@ -41,7 +42,7 @@ async function loginUser(req, res) {
 		}
 
 		const token = jwt.sign(
-			{ userId: user.userid, username: user.username, email: user.email, isAdmin: user.admin },
+			{ userId: user.userid, username: user.username, userpseudonym: user.userpseudonym, email: user.email, isAdmin: user.admin },
 			'dein_geheimes_token',
 			{ expiresIn: '1d' }
 		);
@@ -51,6 +52,7 @@ async function loginUser(req, res) {
 			user: {
                 userId: user.userid,
 				username: user.username,
+				userPseudonym: user.userpseudonym,
                 email: user.email,
 				isAdmin: user.admin,
 			},

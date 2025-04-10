@@ -15,6 +15,8 @@ export async function getPostList(): Promise<Post[]> {
 export interface Post {
     postId: number;
     userId: number;
+    username: string;
+    userPseudonym: string;
     title: string;
     content: string;
     createdAt: string;
