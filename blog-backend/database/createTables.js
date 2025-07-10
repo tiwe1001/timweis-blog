@@ -1,41 +1,44 @@
 const pool = require('./db');
 /*
 async function createTables() {
-    try {
-      await pool.query(`
-        CREATE TABLE IF NOT EXISTS "user" (
-          userId SERIAL PRIMARY KEY,
-          username VARCHAR(25) UNIQUE NOT NULL,
-          password TEXT NOT NULL,
-          email TEXT UNIQUE NOT NULL,
-          admin BOOLEAN NOT NULL,
-          createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-      `);
-      
-      await pool.query(`
-        CREATE TABLE IF NOT EXISTS post (
-          postId SERIAL PRIMARY KEY,
-          userId INTEGER NOT NULL,
-          title VARCHAR(255) NOT NULL,
-          content TEXT NOT NULL,
-          createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          CONSTRAINT fk_user FOREIGN KEY (userId) REFERENCES "user"(userId)
-        );
-      `);
+  try {
+    await pool.query(`DROP TABLE IF EXISTS post;`);
+    await pool.query(`DROP TABLE IF EXISTS "user";`);
 
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS "user" (
+        userId SERIAL PRIMARY KEY,
+        username VARCHAR(25) UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        admin BOOLEAN NOT NULL,
+        userPseudonym VARCHAR(50),
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
 
-      console.log("Tabellen erfolgreich erstellt");
-    } catch (error) {
-      console.error("Fehler beim Erstellen der Tabellen", error);
-    } finally {
-      await pool.end(); // Verbindung schließen
-    }
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS post (
+        postId SERIAL PRIMARY KEY,
+        userId INTEGER NOT NULL,
+        title VARCHAR(255) NOT NULL,
+        content TEXT NOT NULL,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT fk_user FOREIGN KEY (userId) REFERENCES "user"(userId)
+      );
+    `);
+
+    console.log("Tabellen erfolgreich erstellt ✅");
+  } catch (error) {
+    console.error("Fehler beim Erstellen der Tabellen ❌", error);
+  } finally {
+    await pool.end(); // nur hier, weil Setup-Skript
   }
-  
+}
+
 createTables();
-*/
-/*
+
+
 async function insertUsersInTable() {
   try {
     const password = 'test123';
@@ -60,8 +63,8 @@ async function insertUsersInTable() {
 }
 
 insertUsersInTable();
-*/
-/*
+
+
 async function listTables() {
     try {
       const res = await pool.query(`
@@ -78,6 +81,7 @@ async function listTables() {
 listTables();
 */
 
+/*
 async function createSamplePosts() {
   const admins = [1, 2, 3]; // Die UserIds der Admins
   const numberOfPosts = 30;
@@ -112,3 +116,35 @@ async function createSamplePosts() {
 }
 
 createSamplePosts();
+*/
+
+
+const bcrypt = require('bcrypt');
+
+async function updatePasswords() {
+  try {
+    const res = await pool.query('SELECT userid, password FROM "user"');
+    for (const user of res.rows) {
+      // prüfe, ob schon gehasht
+      if (user.password.startsWith('$2b$')) {
+        console.log(`User ${user.userid} hat schon Hash, überspringe.`);
+        continue;
+      }
+
+      const hash = await bcrypt.hash(user.password, 10);
+
+      await pool.query(
+        `UPDATE "user" SET password = $1 WHERE userid = $2`,
+        [hash, user.userid]
+      );
+
+      console.log(`User ${user.userid} Passwort gehasht.`);
+    }
+  } catch (err) {
+    console.error('Fehler beim Aktualisieren der Passwörter', err);
+  } finally {
+    await pool.end();
+  }
+}
+
+updatePasswords();

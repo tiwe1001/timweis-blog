@@ -105,14 +105,14 @@ watch(
 
 .logo {
     display: block;
-    width: 100%;
+    width: 90%;
 }
 
 .circleA {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 90%;
     animation: animCircleA 15s linear infinite;
 	animation-play-state: running;
 }
@@ -121,7 +121,7 @@ watch(
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 90%;
     animation: animCircleB 15s linear infinite;
 	animation-play-state: running;
 }
@@ -130,7 +130,7 @@ watch(
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 90%;
     animation: animCircleC 15s linear infinite;
 	animation-play-state: running;
 }

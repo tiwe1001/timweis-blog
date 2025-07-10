@@ -23,6 +23,13 @@ export async function loginUser(username: string, password: string) {
     return response.data;
 }
 
+export async function updateUser(userId: number, username: string, email: string, userPseudonym: string) {
+    const response = await axios.post(API_PATH + '/updateUser', {
+        userId, username, email, userPseudonym
+    });
+    return response.data;
+}
+
 export interface User {
     userId: number;
     username: string;

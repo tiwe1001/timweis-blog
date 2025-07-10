@@ -8,7 +8,7 @@
 		<v-list class="bg-transparent position-absolute top-0 right-0">
 			<v-tooltip location="bottom" text="Account">
 				<template v-slot:activator="{ props }">
-					<v-icon v-bind="props">mdi-account</v-icon>
+					<v-icon v-bind="props" @click="editAccountDialog = !editAccountDialog">mdi-account</v-icon>
 				</template>
 			</v-tooltip>
             <v-tooltip location="bottom" text="Settings">
@@ -23,15 +23,21 @@
 			</v-tooltip>
 		</v-list>
     </div>
+	<v-dialog v-model="editAccountDialog" opacity="0.2">
+        <EditAccountComponent @close="editAccountDialog = false"></EditAccountComponent>
+    </v-dialog>
 </template>
 
 <script setup lang="ts">
 import { useUserStore } from '@/store/user';
 import { useRouter } from 'vue-router';
 import imgLogo from '@/assets/logo-transparent.png';
+import EditAccountComponent from '@/components/EditAccountComponent.vue';
+import { ref } from 'vue';
 
 const userStore = useUserStore();
 const router = useRouter();
+const editAccountDialog = ref(false);
 
 function handleLogout() {
 	userStore.clearUser();

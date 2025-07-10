@@ -63,7 +63,31 @@ async function loginUser(req, res) {
 	}
 }
 
+async function updateUser(req, res) {
+	try {
+		const { username, email, userPseudonym, userId } = req.body;
+
+		const result = await pool.query(`
+  			UPDATE "user"
+  			SET username = $1, email = $2, userPseudonym = $3
+  			WHERE userId = $4
+  			`,
+  			[username, email, userPseudonym, userId]
+		);
+
+		if (result.rowCount === 0) {
+			return res.status(404).json({ error: 'Benutzer nicht gefunden' });
+		}
+
+		res.json({ message: 'Benutzer erfolgreich aktualisiert' });
+	} catch (err) {
+		console.error('Fehler beim Aktualisieren des Benutzers:', err);
+    	res.status(500).json({ error: 'Interner Serverfehler' });
+	}
+}
+
 module.exports = {
     getAllUsers,
-    loginUser
+    loginUser,
+	updateUser
 };
