@@ -4,7 +4,7 @@
 			<NavbarComponent></NavbarComponent>
 		</v-row>
 
-		<CreatePostComponent></CreatePostComponent>
+		<CreatePostComponent @post-created="fetchData"></CreatePostComponent>
 		<PostsComponent :posts="posts"></PostsComponent>
 	</v-container>
 </template>

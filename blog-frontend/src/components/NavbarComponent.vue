@@ -33,11 +33,20 @@ import { useUserStore } from '@/store/user';
 import { useRouter } from 'vue-router';
 import imgLogo from '@/assets/logo-transparent.png';
 import EditAccountComponent from '@/components/EditAccountComponent.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const userStore = useUserStore();
 const router = useRouter();
 const editAccountDialog = ref(false);
+
+watch(
+  () => editAccountDialog.value,
+  (newPath) => {
+    if (editAccountDialog.value === true) router.push('/account');
+    else router.push('/home');
+  },
+  { immediate: true }
+);
 
 function handleLogout() {
 	userStore.clearUser();

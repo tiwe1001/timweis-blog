@@ -22,6 +22,12 @@ const routes: Array<RouteRecordRaw> = [
     component: HomeView,
     meta: { requiresAuth: true, title: 'Home | T' }
   },
+  {
+    path: '/account',
+    name: 'account',
+    component: HomeView,
+    meta: { requiresAuth: true, title: 'Account | T' }
+  },
 ]
 
 const router = createRouter({

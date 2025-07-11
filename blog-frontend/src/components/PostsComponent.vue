@@ -1,5 +1,5 @@
 <template>
-    <div v-for="post in props.posts" :key="post.postId" class="post-container pa-3 ma-5 ml-15 mr-15">
+    <div v-for="post in props.posts?.slice(0,10)" :key="post.postId" class="post-container pa-3 ma-5 ml-15 mr-15">
         <div>
             <div class="d-flex">
                 <img class="profile-picture mr-2" :src="imgProfilePicture"/>

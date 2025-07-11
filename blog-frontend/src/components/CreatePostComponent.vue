@@ -17,33 +17,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { defineEmits, ref } from 'vue';
 import * as PostService from '@/service/post';
+import { useUserStore } from '@/store/user';
 
+const userStore = useUserStore();
 const newPostIsActive = ref(false);
 const newPostTitle = ref('');
 const newPostContent = ref('');
 
 function showCreateNewPost() {
     newPostIsActive.value = !newPostIsActive.value;
-
     newPostTitle.value = '';
     newPostContent.value = '';
 }
 
 async function createPost(title: string, content: string) {
-    console.log('TBI: ', title, ' --- ' , content);
-
-    // endpoint to save ne dpost in database
-    /*
     try {
-        await PostService.createPost(title, content);
+        await PostService.createNewPost(userStore.userId, title, content);
         showCreateNewPost();
+        emit('post-created');
     } catch (error) {
         console.error('Failed to create a new post: ', error);
     }
-    */
 }
+
+const emit = defineEmits<{
+  (e: 'post-created'): void;
+}>();
 </script>
 
 <style lang="css" scoped>

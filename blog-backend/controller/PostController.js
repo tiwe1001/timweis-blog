@@ -33,6 +33,33 @@ async function getAllPosts(request, response) {
     }
 }
 
+async function createNewPost(request, response) {
+    try {
+        const { userId, title, content } = request.body;
+
+        const result = await pool.query(`
+            INSERT INTO post (
+                userID,
+                title,
+                content,
+                createdAt
+            ) VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+        `,
+        [userId, title, content]
+        );
+
+        response.status(201).json({
+			message: 'Post erfolgreich erstellt',
+			post: result.rows[0],
+		});
+    } catch (error) {
+        console.error('Fehler beim Erstellen des neuen Posts:', error);
+    	res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+}
+
+
 module.exports = {
-    getAllPosts
+    getAllPosts,
+    createNewPost
 };

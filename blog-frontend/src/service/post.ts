@@ -12,6 +12,13 @@ export async function getPostList(): Promise<Post[]> {
     }
 }
 
+export async function createNewPost(userId: number, title: string, content: string) {
+    const response = await axios.post(API_PATH + '/newpost', {
+        userId, title, content
+    });
+    return response.data;
+}
+
 export interface Post {
     postId: number;
     userId: number;

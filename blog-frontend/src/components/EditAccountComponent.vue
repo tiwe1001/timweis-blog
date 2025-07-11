@@ -1,6 +1,6 @@
 <template>  
 <v-card class="d-flex flex-column align-center justify-center mx-auto" width="600px">
-    <v-icon class="close-icon">
+    <v-icon class="close-icon" @click="closeLoginDialog">
         mdi-close
     </v-icon>
 
@@ -40,16 +40,21 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store/user';
 import * as UserService from '@/service/user';
-import { ref } from 'vue';
+import { defineEmits, ref } from 'vue';
 
 const userStore = useUserStore();
 const editUsername = ref(userStore.username);
 const editEmail = ref(userStore.email);
 const editUserPseudonym = ref(userStore.userPseudonym);
+const emit = defineEmits(['close']);
+
+function closeLoginDialog() {
+    emit('close');
+}
 
 async function updateUserAcountData(username: string, email: string, userPseudonym: string) {
     try {
-        const data = await UserService.updateUser(userStore.userId, username, email, userPseudonym);
+        await UserService.updateUser(userStore.userId, username, email, userPseudonym);
 
         userStore.setUser(
             userStore.accessToken,
@@ -61,6 +66,7 @@ async function updateUserAcountData(username: string, email: string, userPseudon
         );
 
         console.log('User data updated successfull. ');
+        closeLoginDialog();
     } catch (error) {
         console.error('User data not updated!', error);
     }
